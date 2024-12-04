@@ -2,5 +2,11 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+remappings = ['@openzeppelin=lib/openzeppelin-contracts/']
 
+[etherscan]
+educhain = { key = "${ETHERSCAN_API_KEY}" }
+
+[rpc_endpoints]
+educhain = "${EDUCHAIN_RPC_URL}"
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
