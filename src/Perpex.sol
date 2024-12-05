@@ -6,12 +6,12 @@ interface IDIAOracleV2 {
 }
 
 contract PerpetualDEX {
-    address immutable DIA_ORACLE = 0xa93546947f3015c986695750b8bbEa8e26D65856;
-    address immutable SEPOLIA_DIA_ORACLE = 0x76a4BA6e4A40Bc613821e2a468a1e94FcCa4CE83;
+    address immutable DIA_ORACLE = 0x6626f442eBc679f7e35bC62E36E3c1e8820C81C9;
+    // address immutable SEPOLIA_DIA_ORACLE = 0x76a4BA6e4A40Bc613821e2a468a1e94FcCa4CE83;
     string public constant ORACLE_KEY = "ETH/USD";
 
     uint128 public latestPrice;
-    uint256 public timestampOfLatestPrice;
+    uint128 public timestampOfLatestPrice;
 
     struct Order {
         address trader;
@@ -34,20 +34,18 @@ contract PerpetualDEX {
     event FundsWithdrawn(address indexed user, uint256 amount);
 
     // Modifier to check oracle data freshness
-    // modifier priceFresh() {
-    //     require(block.timestamp - timestampOfLatestPrice < MAX_PRICE_AGE, "Oracle price too old");
-    //     _;
-    // }
+    modifier priceFresh() {
+        require(block.timestamp - timestampOfLatestPrice < MAX_PRICE_AGE, "Oracle price too old");
+        _;
+    }
 
     // Fetch ETH/USD price from the DIA Oracle
-    function updatePrice() public {
-        // (uint128 price, uint128 timestamp) = IDIAOracleV2(SEPOLIA_DIA_ORACLE).getValue(ORACLE_KEY);
-        uint128 price = 3865;
-        uint256 timestamp = block.timestamp;
-        // timestampOfLatestPrice = block.timestamp;
-        // require(price > 0, "Invalid price from oracle");
+    function updatePrice() public returns (uint128) {
+        (uint128 price, uint128 timestamp) = IDIAOracleV2(DIA_ORACLE).getValue(ORACLE_KEY);
+        require(price > 0, "Invalid price from oracle");
         latestPrice = price;
         timestampOfLatestPrice = timestamp;
+        return price;
     }
 
     // Deposit ETH to use as collateral
@@ -66,7 +64,7 @@ contract PerpetualDEX {
     }
 
     // Place a buy or sell order
-    function placeOrder(bool isBuyOrder, uint256 price, uint256 amount) external {
+    function placeOrder(bool isBuyOrder, uint256 price, uint256 amount) external priceFresh {
         require(price > 0 && amount > 0, "Invalid price or amount");
         uint256 requiredFunds = isBuyOrder ? (price * amount) / 1e18 : amount;
 
@@ -92,7 +90,7 @@ contract PerpetualDEX {
     }
 
     // Execute an order (matching logic)
-    function executeOrder(uint256 orderIndex, bool isBuyOrder) external {
+    function executeOrder(uint256 orderIndex, bool isBuyOrder) external priceFresh {
         require(orderIndex < (isBuyOrder ? sellOrders.length : buyOrders.length), "Invalid order index");
 
         Order memory order = isBuyOrder ? sellOrders[orderIndex] : buyOrders[orderIndex];

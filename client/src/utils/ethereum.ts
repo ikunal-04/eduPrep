@@ -369,7 +369,7 @@ import { ethers } from 'ethers';
 //   }
 // ];
 
-export const contractAddress = "0x445575639d0c3a3c27D766cB283B484a57D2bE4B";
+export const contractAddress = "0xB0988Aad19E20a91dc9Cc3671b9ED64458937a7a";
 
 export const contractABI = [
   {
@@ -610,8 +610,8 @@ export const contractABI = [
     "outputs": [
       {
         "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
+        "type": "uint128",
+        "internalType": "uint128"
       }
     ],
     "stateMutability": "view"
@@ -620,7 +620,13 @@ export const contractABI = [
     "type": "function",
     "name": "updatePrice",
     "inputs": [],
-    "outputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint128",
+        "internalType": "uint128"
+      }
+    ],
     "stateMutability": "nonpayable"
   },
   {
@@ -635,108 +641,8 @@ export const contractABI = [
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
-  },
-  {
-    "type": "event",
-    "name": "FundsDeposited",
-    "inputs": [
-      {
-        "name": "user",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "FundsWithdrawn",
-    "inputs": [
-      {
-        "name": "user",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "OrderExecuted",
-    "inputs": [
-      {
-        "name": "trader",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "isBuyOrder",
-        "type": "bool",
-        "indexed": false,
-        "internalType": "bool"
-      },
-      {
-        "name": "price",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "OrderPlaced",
-    "inputs": [
-      {
-        "name": "trader",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "isBuyOrder",
-        "type": "bool",
-        "indexed": false,
-        "internalType": "bool"
-      },
-      {
-        "name": "price",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
   }
-]
+];
 
 export async function getEthereumContract() {
   if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
